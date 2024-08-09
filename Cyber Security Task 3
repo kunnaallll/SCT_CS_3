@@ -1,0 +1,54 @@
+import re
+
+def check_password_strength(password):
+    # Criteria
+    length_criteria = len(password) >= 8
+    uppercase_criteria = re.search(r'[A-Z]', password) is not None
+    lowercase_criteria = re.search(r'[a-z]', password) is not None
+    digit_criteria = re.search(r'\d', password) is not None
+    special_char_criteria = re.search(r'[!@#$%^&*(),.?":{}|<>]', password) is not None
+
+    # Calculate strength score
+    score = sum([
+        length_criteria,
+        uppercase_criteria,
+        lowercase_criteria,
+        digit_criteria,
+        special_char_criteria
+    ])
+
+    # Determine strength level
+    if score == 5:
+        strength = "Very Strong"
+    elif score == 4:
+        strength = "Strong"
+    elif score == 3:
+        strength = "Moderate"
+    elif score == 2:
+        strength = "Weak"
+    else:
+        strength = "Very Weak"
+
+    return strength, score
+
+def main():
+    password = input("Enter a password to assess its strength: ")
+    strength, score = check_password_strength(password)
+
+    print(f"Password Strength: {strength}")
+    print(f"Strength Score: {score}/5")
+
+    # Provide feedback based on missing criteria
+    if len(password) < 8:
+        print("- The password is too short. It should be at least 8 characters long.")
+    if not re.search(r'[A-Z]', password):
+        print("- The password should contain at least one uppercase letter.")
+    if not re.search(r'[a-z]', password):
+        print("- The password should contain at least one lowercase letter.")
+    if not re.search(r'\d', password):
+        print("- The password should contain at least one digit.")
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        print("- The password should contain at least one special character.")
+
+if __name__ == "__main__":
+    main()
